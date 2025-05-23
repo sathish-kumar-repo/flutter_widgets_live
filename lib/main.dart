@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'models/widget_model.dart';
 import 'provider/theme_provider.dart';
 import 'screens/home_screen.dart';
-import 'screens/widget_detail_screen.dart';
 import 'data/widget_data.dart';
 
 void main() {
@@ -61,10 +60,7 @@ final _router = GoRouter(
             builder: () => const Text("Not Found"),
           ),
         );
-        return WidgetDetailScreen(
-          widgetName: widgetModel.name,
-          liveWidget: widgetModel.builder(),
-        );
+        return widgetModel.builder();
       },
     ),
   ],
