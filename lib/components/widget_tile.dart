@@ -12,25 +12,28 @@ class WidgetTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-      child: Card(
-        elevation: 4,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Center(
-          child: ListTile(
-            leading: const Icon(
-              Icons.widgets,
-              color: AppTheme.accentColor,
-            ),
-            title: Text(
-              widgetModel.name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+      child: GestureDetector(
+        onTap: () => context.go('/widget/${widgetModel.route}'),
+        child: Card(
+          elevation: 4,
+          surfaceTintColor: Colors.transparent,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Center(
+            child: ListTile(
+              leading: const Icon(
+                Icons.widgets,
+                color: AppTheme.accentColor,
               ),
+              title: Text(
+                widgetModel.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () => context.go('/widget/${widgetModel.route}'),
           ),
         ),
       ),
