@@ -603,8 +603,8 @@ final List<WidgetModel> widgetList = [
     builder: () => const DateRangePickerWidget(),
   ),
   WidgetModel(
-    name: "DecorateBox",
-    route: "decoratebox",
+    name: "DecoratedBox",
+    route: "decoratedbox",
     builder: () => const DecoratedBoxWidget(),
   ),
   WidgetModel(
