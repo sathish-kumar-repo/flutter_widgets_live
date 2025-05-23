@@ -35,6 +35,9 @@ final _router = GoRouter(
       },
     ),
   ],
+  errorBuilder: (context, state) => const Scaffold(
+    body: Center(child: Text('Page not found')),
+  ),
 );
 
 class WidgetExplorerApp extends StatelessWidget {
