@@ -16,20 +16,22 @@ class WidgetTile extends StatelessWidget {
         elevation: 4,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ListTile(
-          leading: const Icon(
-            Icons.widgets,
-            color: AppTheme.accentColor,
-          ),
-          title: Text(
-            widgetModel.name,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+        child: Center(
+          child: ListTile(
+            leading: const Icon(
+              Icons.widgets,
+              color: AppTheme.accentColor,
             ),
+            title: Text(
+              widgetModel.name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () => context.go('/widget/${widgetModel.route}'),
           ),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-          onTap: () => context.go('/widget/${widgetModel.route}'),
         ),
       ),
     );

@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets_live/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import '../components/widget_tile.dart';
 import '../data/widget_data.dart';
+import '../models/widget_model.dart';
 import '../provider/theme_provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,35 +15,49 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _searchText = "";
+  bool _isGridView = true;
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDarkMode = themeProvider.isDarkMode;
+
+    // Filter widget list by search input
     final filteredWidgets = widgetList
         .where((w) => w.name.toLowerCase().contains(_searchText.toLowerCase()))
         .toList();
-
-    final isDarkMode = themeProvider.isDarkMode;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter Widget Live"),
         elevation: 1,
         actions: [
-          Icon(
-            isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
-            color: isDarkMode ? Colors.white : AppTheme.accentColor,
+          // Toggle grid/list view
+          IconButton(
+            icon: Icon(
+              _isGridView ? Icons.view_list : Icons.grid_view,
+              color: isDarkMode ? Colors.white : AppTheme.accentColor,
+            ),
+            tooltip:
+                _isGridView ? 'Switch to List View' : 'Switch to Grid View',
+            onPressed: () => setState(() => _isGridView = !_isGridView),
           ),
-          CupertinoSwitch(
-            value: isDarkMode,
-            onChanged: (_) => themeProvider.toggleTheme(),
-            activeColor: AppTheme.accentColor,
+          // Toggle dark/light theme
+          IconButton(
+            icon: Icon(
+              isDarkMode ? Icons.nightlight_round : Icons.wb_sunny,
+              color: isDarkMode ? Colors.white : AppTheme.accentColor,
+            ),
+            tooltip:
+                isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            onPressed: themeProvider.toggleTheme,
           ),
           const SizedBox(width: 12),
         ],
       ),
       body: Column(
         children: [
+          // Search bar
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ConstrainedBox(
@@ -52,34 +66,74 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(
                   hintText: "Search widgets...",
                   prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _searchText.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => setState(() => _searchText = ""),
+                        )
+                      : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() => _searchText = value);
-                },
+                onChanged: (value) => setState(() => _searchText = value),
               ),
             ),
           ),
-          if (filteredWidgets.isNotEmpty)
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(10),
-                itemCount: filteredWidgets.length,
-                itemBuilder: (context, index) {
-                  return WidgetTile(widgetModel: filteredWidgets[index]);
-                },
-              ),
-            )
-          else
-            Expanded(
-              child: Center(
-                child: Text('Nothing found "${_searchText}"'),
-              ),
-            )
+
+          // Main content
+          Expanded(
+            child: filteredWidgets.isNotEmpty
+                ? AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) =>
+                        FadeTransition(opacity: animation, child: child),
+                    child: _isGridView
+                        ? _buildGridView(filteredWidgets)
+                        : _buildListView(filteredWidgets),
+                  )
+                : Center(
+                    child: Text('Nothing found "$_searchText"'),
+                  ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _buildGridView(List<WidgetModel> widgets) {
+    return LayoutBuilder(
+      key: const ValueKey('grid'),
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final crossAxisCount = screenWidth < 600
+            ? 1
+            : screenWidth < 900
+                ? 2
+                : 3;
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(10),
+          itemCount: widgets.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 2.5,
+          ),
+          itemBuilder: (context, index) =>
+              WidgetTile(widgetModel: widgets[index]),
+        );
+      },
+    );
+  }
+
+  Widget _buildListView(List<WidgetModel> widgets) {
+    return ListView.builder(
+      key: const ValueKey('list'),
+      padding: const EdgeInsets.all(10),
+      itemCount: widgets.length,
+      itemBuilder: (context, index) => WidgetTile(widgetModel: widgets[index]),
     );
   }
 }

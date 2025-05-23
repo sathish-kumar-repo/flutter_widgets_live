@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widgets_live/screens/not_found_screen.dart';
 import 'package:flutter_widgets_live/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -36,29 +37,26 @@ class MyApp extends StatelessWidget {
 }
 
 final _router = GoRouter(
-  // initialLocation: '/',
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const HomeScreen(),
-    ),
-    GoRoute(
-      path: '/widget/:name',
-      builder: (context, state) {
-        final name = state.pathParameters['name']!;
-        final widgetModel = widgetList.firstWhere(
-          (w) => w.name.toLowerCase() == name.toLowerCase(),
-          orElse: () => WidgetModel(
-            name: 'Not Found',
-            route: '',
-            builder: () => const Text("Not Found"),
-          ),
-        );
-        return widgetModel.builder();
-      },
-    ),
-  ],
-  errorBuilder: (context, state) => const Scaffold(
-    body: Center(child: Text('Page not found')),
-  ),
-);
+    initialLocation: '/',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/widget/:name',
+        builder: (context, state) {
+          final name = state.pathParameters['name']!;
+          final widgetModel = widgetList.firstWhere(
+            (w) => w.name.toLowerCase() == name.toLowerCase(),
+            orElse: () => WidgetModel(
+              name: 'Not Found',
+              route: '',
+              builder: () => NotFoundPage(),
+            ),
+          );
+          return widgetModel.builder();
+        },
+      ),
+    ],
+    errorBuilder: (context, state) => const NotFoundPage());
