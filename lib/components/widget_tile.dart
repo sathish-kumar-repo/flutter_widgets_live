@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widgets_live/theme/app_theme.dart';
 import 'package:go_router/go_router.dart';
 import '../models/widget_model.dart';
 
@@ -12,10 +13,14 @@ class WidgetTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
       child: Card(
-        elevation: 3,
+        elevation: 4,
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
-          leading: const Icon(Icons.widgets, color: Colors.deepPurple),
+          leading: const Icon(
+            Icons.widgets,
+            color: AppTheme.accentColor,
+          ),
           title: Text(
             widgetModel.name,
             style: const TextStyle(
