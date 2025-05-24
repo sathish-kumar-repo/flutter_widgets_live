@@ -136,8 +136,10 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisSpacing: 10,
             childAspectRatio: 2.5,
           ),
-          itemBuilder: (context, index) =>
-              WidgetTile(widgetModel: widgets[index]),
+          itemBuilder: (context, index) => WidgetTile(
+            widgetModel: widgets[index],
+            isGridView: _isGridView,
+          ),
         );
       },
     );
@@ -148,7 +150,10 @@ class _HomeScreenState extends State<HomeScreen> {
       key: const ValueKey('list'),
       padding: const EdgeInsets.all(10),
       itemCount: widgets.length,
-      itemBuilder: (context, index) => WidgetTile(widgetModel: widgets[index]),
+      itemBuilder: (context, index) => WidgetTile(
+        widgetModel: widgets[index],
+        isGridView: _isGridView,
+      ),
     );
   }
 }
