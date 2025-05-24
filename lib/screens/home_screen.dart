@@ -29,8 +29,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 70,
         title: const Text("Flutter Widget Live"),
-        elevation: 1,
+        elevation: 5,
+        surfaceTintColor: Colors.transparent,
+        scrolledUnderElevation: 5,
+        shadowColor: isDarkMode
+            ? Colors.black.withOpacity(0.5)
+            : Colors.grey.withOpacity(0.5),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
+        leading: const Padding(
+          padding: EdgeInsets.all(10.0),
+          child: FlutterLogo(),
+        ),
         actions: [
           // Toggle grid/list view
           IconButton(
@@ -59,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // Search bar
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.all(15),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 400),
               child: TextField(
